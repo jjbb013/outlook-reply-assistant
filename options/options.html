@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>设置 - 邮件智能答复助手</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>设置</h1>
+    </header>
+
+    <main>
+      <section>
+        <h2>API 配置</h2>
+        <p class="description">配置你的大模型 API 以启用智能回复功能</p>
+
+        <div class="form-group">
+          <label>API 类型</label>
+          <div class="radio-group">
+            <label class="radio-label">
+              <input type="radio" name="apiType" value="openai" checked>
+              <span>OpenAI 兼容</span>
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="apiType" value="anthropic">
+              <span>Anthropic</span>
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="apiType" value="gemini">
+              <span>Google Gemini</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="apiKey">API Key</label>
+          <input type="password" id="apiKey" placeholder="输入你的 API Key">
+        </div>
+
+        <div class="form-group" id="baseUrlGroup">
+          <label for="baseUrl">Base URL</label>
+          <input type="text" id="baseUrl" placeholder="https://api.openai.com/v1">
+          <span class="hint">第三方接口请填写实际的 Base URL</span>
+        </div>
+
+        <div class="form-group">
+          <label for="model">模型 ID</label>
+          <input type="text" id="model" placeholder="gpt-4o">
+          <span class="hint">支持的模型 ID</span>
+        </div>
+
+        <div class="form-group">
+          <label>输出格式</label>
+          <div class="radio-group">
+            <label class="radio-label">
+              <input type="radio" name="outputFormat" value="text" checked>
+              <span>纯文本</span>
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="outputFormat" value="json">
+              <span>JSON</span>
+            </label>
+          </div>
+        </div>
+
+        <button id="testApiBtn" class="btn btn-secondary" style="margin-top: 12px;">
+          测试 API 连接
+        </button>
+      </section>
+
+      <section>
+        <h2>其他设置</h2>
+
+        <div class="form-group">
+          <label>默认语言偏好</label>
+          <div class="radio-group">
+            <label class="radio-label">
+              <input type="radio" name="language" value="auto" checked>
+              <span>自动检测</span>
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="language" value="zh">
+              <span>中文优先</span>
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="language" value="en">
+              <span>English</span>
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>数据库管理</h2>
+        <div class="action-buttons">
+          <button id="exportBtn" class="btn btn-secondary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            导出数据
+          </button>
+          <button id="importBtn" class="btn btn-secondary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+            导入数据
+          </button>
+          <button id="clearBtn" class="btn btn-danger">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="3 6 5 6 21 6"></polyline>
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+            </svg>
+            清空数据
+          </button>
+          <input type="file" id="importFile" accept=".json" style="display: none;">
+        </div>
+      </section>
+
+      <div class="form-actions">
+        <button id="saveBtn" class="btn btn-primary">保存设置</button>
+      </div>
+    </main>
+
+    <footer>
+      <p>邮件智能答复助手 v1.0.0</p>
+    </footer>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="options.js"></script>
+</body>
+</html>
