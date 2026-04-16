@@ -3,17 +3,28 @@
 (function() {
   'use strict';
 
-  // 防止重复注入
-  if (window.__outlookMailReaderInjected) return;
-  window.__outlookMailReaderInjected = true;
+  console.log('[邮件智能答复助手] Content script 加载中...');
 
   // 监听来自后台的消息
   chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.action === 'getEmailContent') {
-      const emailData = extractEmailContent();
-      sendResponse(emailData);
+    console.log('[邮件智能答复助手] 收到消息:', request.action);
+
+    if (request.action === 'ping') {
+      sendResponse({ status: 'ok', timestamp: Date.now() });
+      return true;
     }
-    return true;
+
+    if (request.action === 'getEmailContent') {
+      // 异步处理确保 sendResponse 正确返回
+      setTimeout(() => {
+        const emailData = extractEmailContent();
+        console.log('[邮件智能答复助手] 提取结果:', emailData.subject ? '成功' : '无内容');
+        sendResponse(emailData);
+      }, 100);
+      return true;
+    }
+
+    return false;
   });
 
   // 提取邮件内容

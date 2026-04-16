@@ -54,16 +54,80 @@ async function getEmailContent() {
         return;
       }
 
-      chrome.tabs.sendMessage(tabs[0].id, { action: 'getEmailContent' }, (response) => {
+      const tab = tabs[0];
+
+      // 检查 URL 是否在支持的域名范围内
+      const supportedHosts = ['outlook.live.com', 'outlook.office.com', 'outlook.office365.com'];
+      let urlObj;
+      try {
+        urlObj = new URL(tab.url);
+      } catch (e) {
+        reject(new Error('无法解析页面 URL'));
+        return;
+      }
+      const isSupported = supportedHosts.some(host => urlObj.hostname.includes(host));
+
+      if (!isSupported) {
+        reject(new Error('请在 Outlook 网页版 (outlook.office.com / outlook.live.com) 中使用此插件'));
+        return;
+      }
+
+      // 首先 ping 一下检查 content script 是否加载
+      chrome.tabs.sendMessage(tab.id, { action: 'ping' }, (response) => {
         if (chrome.runtime.lastError) {
-          reject(new Error('Content script 未加载，请刷新页面'));
-        } else if (response && response.subject) {
-          resolve(response);
+          // Content script 未加载，尝试动态注入
+          console.log('[邮件智能答复助手] Content script 未加载，尝试动态注入...');
+          injectContentScript(tab.id)
+            .then(() => {
+              setTimeout(() => getEmailContentWithRetry(tab.id, 0, resolve, reject), 500);
+            })
+            .catch(err => {
+              reject(new Error('无法加载脚本，请刷新 Outlook 页面后重试'));
+            });
         } else {
-          resolve(null);
+          getEmailContentWithRetry(tab.id, 0, resolve, reject);
         }
       });
     });
+  });
+}
+
+// 带重试的获取邮件内容
+function getEmailContentWithRetry(tabId, attempt, resolve, reject) {
+  chrome.tabs.sendMessage(tabId, { action: 'getEmailContent' }, (response) => {
+    if (chrome.runtime.lastError) {
+      if (attempt < 2) {
+        setTimeout(() => getEmailContentWithRetry(tabId, attempt + 1, resolve, reject), 500);
+      } else {
+        reject(new Error('无法获取邮件内容，请刷新页面后重试'));
+      }
+    } else if (response && response.subject) {
+      resolve(response);
+    } else if (response) {
+      reject(new Error('未找到邮件内容，请确保已打开一封邮件'));
+    } else {
+      reject(new Error('无法读取邮件，请确保已打开一封邮件'));
+    }
+  });
+}
+
+// 动态注入 content script
+async function injectContentScript(tabId) {
+  return new Promise((resolve, reject) => {
+    if (typeof chrome !== 'undefined' && chrome.scripting) {
+      chrome.scripting.executeScript(
+        { target: { tabId: tabId }, files: ['content/content.js'] },
+        (results) => {
+          if (chrome.runtime.lastError) {
+            reject(new Error(chrome.runtime.lastError.message));
+          } else {
+            resolve(results);
+          }
+        }
+      );
+    } else {
+      reject(new Error('scripting API 不可用'));
+    }
   });
 }
 
