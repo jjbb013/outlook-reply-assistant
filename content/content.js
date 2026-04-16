@@ -49,7 +49,9 @@
       '[role="heading"][aria-level="1"]',
       'h1[aria-label*="Subject"]',
       '.x_subject',
-      '[class*="subject"]'
+      // Outlook 新版 React 架构
+      '[role="heading"]',
+      '.JdFsz'
     ];
     result.subject = getTextContent(subjectSelectors);
 
@@ -111,7 +113,9 @@
       '[role="document"]',
       '.message-body-content',
       '.x_body',
-      '[class*="bodyContent"]'
+      '[class*="bodyContent"]',
+      // Outlook 新版 React 架构 (body-100)
+      '.body-100'
     ];
 
     for (const selector of bodySelectors) {
@@ -182,7 +186,7 @@
 
   // 检测是否在邮件阅读视图
   function isReadingEmail() {
-    return document.querySelector('[data-testid="message-body"], [role="document"], .message-body-content, .ReadingPane') !== null;
+    return document.querySelector('[data-testid="message-body"], [role="document"], .message-body-content, .ReadingPane, .body-100') !== null;
   }
 
   // 通知后台脚本邮件视图已加载
