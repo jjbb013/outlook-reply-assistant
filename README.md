@@ -17,7 +17,7 @@
 
 一款专为 Outlook 网页版设计的 Chrome 扩展插件，智能分析邮件内容并提供 AI 答复建议。
 
-**版本**: 1.0.0
+**版本**: 1.0.2
 
 ## 功能
 
@@ -72,7 +72,7 @@
 
 ### 使用流程
 
-1. 打开 Outlook 网页版 (outlook.office.com / outlook.live.com)
+1. 打开 Outlook 网页版 (outlook.office.com / outlook.live.com / outlook.office365.com / outlook.cloud.microsoft.com)
 2. 打开一封邮件
 3. 点击插件图标
 4. 插件会自动读取邮件内容并生成回复建议
@@ -157,13 +157,20 @@
 
 ## 兼容性
 
+- **支持的 Outlook 域名**:
+  - outlook.office.com
+  - outlook.live.com
+  - outlook.office365.com
+  - outlook.cloud.microsoft.com
 - Chrome 88+
 - Edge 88+
 - 理论上支持 Safari 15+ (需签名)
 
 ## 更新日志
 
-### v1.0.1 (2026-04-17)
+### v1.0.2 (2026-04-17)
+
+- 新增 outlook.cloud.microsoft.com 支持
 
 - 修复 Outlook 新版 React 架构邮件内容读取问题
 - 新增 `.body-100` 选择器支持新版 Outlook

@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "邮件智能答复助手",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "智能分析 Outlook 邮件内容，提供 AI 答复建议和历史模板匹配",
   "icons": {
     "48": "icons/icon.svg",
@@ -18,7 +18,8 @@
   "host_permissions": [
     "*://outlook.live.com/*",
     "*://outlook.office.com/*",
-    "*://outlook.office365.com/*"
+    "*://outlook.office365.com/*",
+    "*://outlook.cloud.microsoft/*"
   ],
   "action": {
     "default_popup": "popup/popup.html",
@@ -36,7 +37,9 @@
       "matches": [
         "*://outlook.live.com/*",
         "*://outlook.office.com/*",
-        "*://outlook.office365.com/*"
+        "*://outlook.office365..com/*",
+        "*://outlook.office365.com/*",
+        "*://outlook.cloud.microsoft/*"
       ],
       "js": ["content/content.js"],
       "run_at": "document_idle"
